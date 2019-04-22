@@ -1,0 +1,19 @@
+- name: install and config mysql
+  hosts: db
+  roles: 
+    - role: '/home/pichel/Documents/cours/devOps/ops/roles/sql'
+
+- name: install ftp
+  hosts: db
+  roles: 
+    - role: '/home/pichel/Documents/cours/devOps/ops/roles/ftp'
+
+- name: install and config Apache and PhP
+  hosts: web
+  roles: 
+    - role: '/home/pichel/Documents/cours/devOps/ops/roles/ApachePhp'
+
+- name: install and configure wp
+  hosts: web
+  roles: 
+    - role: '/home/pichel/Documents/cours/devOps/ops/roles/wordpress'

@@ -1,0 +1,8 @@
+mysql_db: "wp"
+mysql_user: "wpUser"
+mysql_password: "azertyuiop"
+mysql_host: "13.81.244.24"
+pathwp1: ./templates/test
+pathwp2: ./templates/test2
+
+wordpress_source: "https://wordpress.org/latest.tar.gz"

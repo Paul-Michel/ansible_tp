@@ -1,0 +1,42 @@
+- name: "check exist"
+  stat:
+    path: "/var/www/html/wordpress"
+  register: check_wordpress
+
+- name: "download wp"
+  unarchive:
+    src: "{{wordpress_source}}"
+    dest: "/var/www/html"
+    remote_src: yes
+  become: true
+  when: check_wordpress.stat.exists == False
+
+- name: "rm index.html"
+  file: 
+    path: "/var/www/html/index.html"
+    state: absent
+  become: true
+
+- name: "check sample db"
+  stat: 
+    path: "/var/www/html/wordpress/wp-config-sample.php"
+  register: check_sample
+
+- name: "rename sample"
+  command: mv /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+  when: check_sample.stat.exists == True
+  become: true
+
+- name: "config wp-config.php wp1"
+  template:
+    src: "{{pathwp1}}"
+    dest: /var/www/html/wordpress/wp-config.php
+  become: true
+  when: "'machine1' in inventory_hostname"
+
+- name: "config wp-config.php wp2"
+  template:
+    src: "{{pathwp2}}"
+    dest: /var/www/html/wordpress/wp-config.php
+  become: true
+  when: "'machine2' in inventory_hostname"

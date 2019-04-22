@@ -1,0 +1,39 @@
+- name: install packages
+  apt: 
+    name: "{{item}}"
+    update_cache: yes
+  with_items: 
+    - mysql-server
+    - python
+    - python-pip
+    - libmysqlclient-dev
+  remote_user: pyshell
+  become: true
+
+- name: install mysql-python
+  pip: name=MySQL-python
+
+- name: "config wp-config.php"
+  template:
+    src: ./templates/.my.cnf
+    dest: /etc/mysql/my.cnf
+  become: true
+
+- name: create a new user
+  mysql_user:
+    name: wpUser
+    password: azertyuiop
+    priv: '*.*:ALL'
+    state: present
+    login_user: root
+    host: '%'
+
+- name: Create two db
+  mysql_db:
+    name: "{{item}}"
+    state: present
+    login_user: wpUser
+    login_password: "azertyuiop"
+  with_items:
+    - wp1
+    - wp2
